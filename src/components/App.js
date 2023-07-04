@@ -28,13 +28,10 @@ function reducer(state, action) {
         questions: action.payload,
         status: "ready",
       };
-
     case "dataFailed":
       return { ...state, status: "error" };
-
     case "start":
       return { ...state, status: "active" };
-
     case "newAnswer":
       const question = state.questions.at(state.index);
       return {
@@ -45,10 +42,8 @@ function reducer(state, action) {
             ? state.points + question.points
             : state.points,
       };
-
     case "nextQuestion":
       return { ...state, index: state.index + 1, answer: null };
-
     case "finish":
       return {
         ...state,
@@ -56,7 +51,13 @@ function reducer(state, action) {
         highscore:
           state.points < state.highscore ? state.highscore : state.points,
       };
-
+    case "restart":
+      return {
+        ...initialState,
+        questions: state.questions,
+        highscore: state.highscore,
+        status: "ready",
+      };
     default:
       throw new Error("Unknown Action");
   }
@@ -116,6 +117,7 @@ export default function App() {
               points={points}
               maxPossiblePoints={maxPossiblePoints}
               highscore={highscore}
+              dispatch={dispatch}
             />
           )}
         </Main>
